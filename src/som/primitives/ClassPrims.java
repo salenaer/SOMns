@@ -38,6 +38,7 @@ public class ClassPrims {
   }
 
   @GenerateNodeFactory
+  @Primitive(primitive = "mirrorSuperclass:")
   public abstract static class SuperClassPrim extends UnaryExpressionNode {
     public SuperClassPrim(final boolean eagWrap, final SourceSection source) { super(eagWrap, source); }
 
