@@ -83,6 +83,7 @@ public class Actor implements Activity {
   private static long numCreatedActors    = 0;
   private static long numCreatedPromises  = 0;
   private static long numResolvedPromises = 0;
+  private static long numRuinedPromises = 0;
 
   /**
    * Possible roles for an actor.
@@ -336,6 +337,8 @@ public class Actor implements Activity {
     public EventualMessage currentMessage;
 
     protected Actor currentlyExecutingActor;
+    public long resolvedPromises;
+    public long ruinedPromises;
 
     // Used for tracing, accessed by the ExecAllMessages classes
     public long currentMessageId;
@@ -375,6 +378,7 @@ public class Actor implements Activity {
           numCreatedMessages  += createdMessages;
           numCreatedPromises  += createdPromises;
           numResolvedPromises += resolvedPromises;
+          numRuinedPromises   += ruinedPromises;
         }
       }
       super.onTermination(exception);
@@ -412,7 +416,7 @@ public class Actor implements Activity {
     if (VmSettings.ACTOR_TRACING) {
       synchronized (statsLock) {
         VM.printConcurrencyEntitiesReport("[Total]\tA#" + numCreatedActors + "\t\tM#" + numCreatedMessages + "\t\tP#" + numCreatedPromises);
-        VM.printConcurrencyEntitiesReport("[Unresolved] " + (numCreatedPromises - numResolvedPromises));
+        VM.printConcurrencyEntitiesReport("[Unresolved] " + (numCreatedPromises - numResolvedPromises - numRuinedPromises));
       }
     }
   }
