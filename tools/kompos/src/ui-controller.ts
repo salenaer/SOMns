@@ -12,6 +12,7 @@ import {dbgLog}       from "./source";
 import {displayMessageHistory, resetLinks, updateStrings, updateData} from "./visualizations";
 import {View, getActivityIdFromView, getSourceIdFrom, getSourceIdFromSection} from "./view";
 import {VmConnection} from "./vm-connection";
+import {ProtocolOverview} from "./protocol";
 
 /**
  * The controller binds the domain model and the views, and mediates their
@@ -20,6 +21,7 @@ import {VmConnection} from "./vm-connection";
 export class UiController extends Controller {
   private dbg: Debugger;
   private view: View;
+  private protocolOverview: ProtocolOverview;
 
   private actProm = {};
   private actPromResolve = {};
@@ -28,6 +30,7 @@ export class UiController extends Controller {
     super(vmConnection);
     this.dbg = dbg;
     this.view = view;
+    this.protocolOverview = new ProtocolOverview();
   }
 
   private reset() {
@@ -114,6 +117,7 @@ export class UiController extends Controller {
     for (const act of newActivities) {
       this.ensureActivityPromise(act.id);
       this.actPromResolve[act.id](act);
+      this.protocolOverview.newActivity(act);
     }
   }
 
@@ -265,5 +269,11 @@ export class UiController extends Controller {
     this.dbg.setResumed(activityId);
     this.view.onContinueExecution(activityId);
     this.vmConnection.sendDebuggerAction("return", activityId);
+  }
+
+  public newMessages(messages: [number,number][]){
+    for (const msg of messages) {
+      this.protocolOverview.newMessage(msg[0], msg[1]);
+    }
   }
 }

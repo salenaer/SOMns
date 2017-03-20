@@ -195,6 +195,7 @@ export class HistoryData {
 
   updateDataBin(data: DataView, controller: Controller) {
     const newActivities: Activity[] = [];
+    const newMessages: [number,number][] = [];
     let i = 0;
     while (i < data.byteLength) {
       const start = i;
@@ -295,9 +296,11 @@ export class HistoryData {
 
           this.addMessage(sender, this.currentReceiver, this.currentMsgId);
           this.currentMsgId += 1;
+          newMessages.push([sender, this.currentReceiver]);
       }
     }
     controller.newActivities(newActivities);
+    controller.newMessages(newMessages);
   }
 }
 

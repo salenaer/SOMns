@@ -13,6 +13,7 @@ export class Controller {
   }
 
   public newActivities(_newActivities: Activity[]) {}
+  public newMessages(_newMessages: [number,number][]) {}
 
   public onConnect() {}
   public onClose()   {}

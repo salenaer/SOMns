@@ -8,7 +8,7 @@ import {HistoryData, ActivityNode, ActivityLink} from "./history-data";
 import {dbgLog} from "./source";
 
 // Tango Color Scheme: http://emilis.info/other/extended_tango/
-const tangoColors = [
+export const tangoColors = [
   ["#2e3436", "#555753", "#888a85", "#babdb6", "#d3d7cf", "#ecf0eb", "#f7f8f5"],
   ["#291e00", "#725000", "#c4a000", "#edd400", "#fce94f", "#fffc9c", "#feffd0"],
   ["#301700", "#8c3700", "#ce5c00", "#f57900", "#fcaf3e", "#ffd797", "#fff0d7"],
@@ -37,7 +37,7 @@ let data = new HistoryData();
  * @param {MessageHistory} msgHist
  */
 export function displayMessageHistory() {
-  const canvas = $("#graph-canvas");
+  const canvas = $("#overview-canvas");
   // colors = d3.scale.category10();
   // colors = d3.scale.ordinal().domain().range(tango)
   canvas.empty();
@@ -46,7 +46,7 @@ export function displayMessageHistory() {
     .scaleExtent([0.1, 10])
     .on("zoom", zoomed);
 
-  const svg = d3.select("#graph-canvas")
+  const svg = d3.select("#overview-canvas")
     .append("svg")
     // .attr("oncontextmenu", "return false;")
     .attr("width", canvas.width())
@@ -75,7 +75,7 @@ export function displayMessageHistory() {
     return link.messageCount / data.getMaxMessageSends();
   });
 
-  // define arrow markers for graph links
+  // define arrow markers for overview links
   createArrowMarker(svg, "end-arrow",   6, "M0,-5L10,0L0,5",  "#000");
   createArrowMarker(svg, "start-arrow", 4, "M10,-5L0,0L10,5", "#000");
 
@@ -165,7 +165,7 @@ function selectEndMarker(d: ActivityLink) {
     : "";
 }
 
-// update graph (called when needed)
+// update overview (called when needed)
 function restart() {
   // path (link) group
   path = path.data(links);
@@ -242,10 +242,10 @@ function restart() {
   // remove old nodes
   circle.exit().remove();
 
-  // set the graph in motion
+  // set the overview in motion
   force.start();
 
-  // execute enough steps that the graph looks static
+  // execute enough steps that the overview looks static
   for (let i = 0; i < 1000; i++) {
     force.tick();
   }
